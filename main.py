@@ -4,7 +4,6 @@ import imgui
 from imgui.integrations.glfw import GlfwRenderer
 import sys
 
-# Oluşturduğumuz modülleri içe aktarıyoruz
 import cpu
 import ram
 
@@ -18,7 +17,6 @@ def main():
     glfw.window_hint(glfw.FLOATING, True)
     glfw.window_hint(glfw.MOUSE_PASSTHROUGH, True)
 
-    # Çözünürlük ayarları
     widget_w, widget_h = 300, 100 
     
     window = glfw.create_window(widget_w, widget_h, "SystemMonitor", None, None)
@@ -27,7 +25,6 @@ def main():
     imgui.create_context()
     impl = GlfwRenderer(window)
 
-    # Başlangıç değerleri
     cpu_val = 0.0
     ram_val = 0.0
     mem_used = 0.0
@@ -39,7 +36,6 @@ def main():
         glfw.poll_events()
         impl.process_inputs()
 
-        # Her 1 saniyede bir güncelle
         if glfw.get_time() - last_update > 1.0:
             # Verileri kendi modüllerinden çekiyoruz
             cpu_val = cpu.get_cpu_usage()
@@ -49,19 +45,16 @@ def main():
 
         imgui.new_frame()
 
-        # Pencereyi sabitle
         imgui.set_next_window_position(20, 20)
         imgui.set_next_window_size(widget_w, widget_h)
         
         imgui.begin("Overlay", flags=imgui.WINDOW_NO_TITLE_BAR | imgui.WINDOW_NO_BACKGROUND | imgui.WINDOW_NO_RESIZE | imgui.WINDOW_NO_INPUTS)
 
-        # Yazıları bas
         imgui.text(f"CPU: %{cpu_val}")
         imgui.text(f"RAM: %{ram_val} ({mem_used}/{mem_total} GB)")
 
         imgui.end()
 
-        # Render
         gl.glClearColor(0, 0, 0, 0)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT)
         imgui.render()
